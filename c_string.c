@@ -174,6 +174,8 @@ char* string_at(C_STRING hMy_string, int index){
 }
 
 char* string_c_str(C_STRING hMy_string){
+    if(hMy_string == NULL)
+        return "";
     Str *pStr = (Str*)hMy_string;
     if(pStr->size + 1 >= pStr->capacity)
         if(!string_resize(hMy_string))

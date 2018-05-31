@@ -8,6 +8,8 @@ typedef void* VECTOR;
 
 VECTOR vector_init_default(Status (*assignment)(ITEM* phLeft, ITEM hRight), void (*destroy)(ITEM* phItem));
 
+VECTOR vector_init_set_cap(Status (*assignment)(ITEM* phLeft, ITEM hRight), void (*destroy)(ITEM* phItem), int capacity);
+
 Status vector_push_back(VECTOR hVector, ITEM n);
 
 Status vector_pop_back(VECTOR hVector);

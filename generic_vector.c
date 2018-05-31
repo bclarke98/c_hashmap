@@ -29,11 +29,15 @@ Status vector_resize(VECTOR hVector){
 }
 
 VECTOR vector_init_default(Status(*assignment)(ITEM* phLeft, ITEM hRight), void(*destroy)(ITEM* phItem)){
+    return vector_init_set_cap(assignment, destroy, 10);
+}
+
+VECTOR vector_init_set_cap(Status (*assignment)(ITEM* phLeft, ITEM hRight), void (*destroy)(ITEM* phItem), int capacity){
     Vector *pVector = (Vector*)malloc(sizeof(Vector));
     int i;
     if(pVector != NULL){
         pVector->size = 0;
-        pVector->capacity = 1;
+        pVector->capacity = capacity;
         pVector->item_assignment = assignment;
         pVector->item_destroy = destroy;
         pVector->data = (ITEM*)malloc(sizeof(ITEM) * pVector->capacity);
@@ -46,6 +50,7 @@ VECTOR vector_init_default(Status(*assignment)(ITEM* phLeft, ITEM hRight), void(
     }
     return pVector;
 }
+
 
 Status vector_push_back(VECTOR hVector, ITEM n){
     Vector *pVector = (Vector*)hVector;
