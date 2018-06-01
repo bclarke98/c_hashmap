@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall --std=c99 -g
 MAIN = main.o
-OBJECTS =  $(MAIN) c_string.o generic_vector.o c_hashmap.o
+OBJECTS =  $(MAIN) c_string.o c_hashmap.o
 
 hashmap_driver: $(OBJECTS)
 	$(CC) $(CFLAGS) -o hashmap_driver $(OBJECTS)
@@ -14,9 +14,6 @@ c_string.o: c_string.c
 
 c_hashmap.o: c_hashmap.c
 	$(CC) $(CFLAGS) -c c_hashmap.c -o c_hashmap.o
-
-generic_vector.o: generic_vector.c
-	$(CC) $(CFLAGS) -c generic_vector.c -o generic_vector.o
 
 clean:
 	rm hashmap_driver $(OBJECTS)

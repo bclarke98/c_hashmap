@@ -1,7 +1,7 @@
 #ifndef C_HASHMAP_H
 #define C_HASHMAP_H
-#include "generic_vector.h"
-#include "c_string.h"
+#include "generic.h"
+#include "status.h"
 
 typedef void* HASHMAP;
 typedef void* FUNC_PAIR;
@@ -15,6 +15,8 @@ HASHMAP hashmap_init_set_cap(FUNC_PAIR keyFuncs, FUNC_PAIR valFuncs, int capacit
 Status hashmap_put(HASHMAP hMap, ITEM key, ITEM value);
 
 ITEM hashmap_get(HASHMAP hMap, ITEM key);
+
+HASHMAP hashmap_deep_copy(HASHMAP hMap, int capacity);
 
 void hashmap_destroy(HASHMAP* phMap);
 

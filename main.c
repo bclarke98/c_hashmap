@@ -1,7 +1,14 @@
+/*
+    Author:         Brendan Clarke
+    Purpose:        Create a hashmap in raw C that allows any data type to be used as keys/values
+    Last Modified:  6/1/18
+    
+    main.c is a test file for the functionality of the hashmap opaque object.
+    It is not required for use of the hashmap opaque object.
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
-
-#include "generic_vector.h"
 #include "c_string.h"
 #include "c_hashmap.h"
 
@@ -23,6 +30,7 @@ int main(int argc, char* argv[]) {
     int i, j;
     C_STRING *keys = (C_STRING*)malloc(sizeof(C_STRING) * NUM);
     C_STRING *vals = (C_STRING*)malloc(sizeof(C_STRING) * NUM);
+    printf("Displaying key/value pairs...\n");
     for(i = 0; i < NUM; i++){
         keys[i] = string_init_default();
         vals[i] = string_init_default();
@@ -35,8 +43,14 @@ int main(int argc, char* argv[]) {
     }
     
     C_STRING result = (C_STRING)hashmap_get(hMap, keys[0]);
+    printf("Displaying result of hashmap_get with first key...\n");
     printf("%s\n", string_c_str(result));
     
+    HASHMAP hNew = hashmap_deep_copy(hMap, 1000);
+    printf("Displaying debug output from resized deep copy of original hashmap...\n");
+    hashmap_debug(hNew);
+    
+        
     for(i = 0; i < NUM; i++){
         string_destroy(&keys[i]);
         string_destroy(&vals[i]);
@@ -44,6 +58,7 @@ int main(int argc, char* argv[]) {
     free(keys);
     free(vals);
     hashmap_destroy(&hMap);
+    hashmap_destroy(&hNew);
     free(funcs);
     return 0;
 }

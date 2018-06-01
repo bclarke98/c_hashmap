@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "c_hashmap.h"
 
 typedef struct funcs{
@@ -164,6 +163,27 @@ ITEM hashmap_get(HASHMAP hMap, ITEM key){
         if(func_compare(pMap->key_funcs, key, pBucket->keys[i]) == 0)
             return pBucket->values[i];
     return NULL;
+}
+
+HASHMAP hashmap_deep_copy(HASHMAP hMap, int capacity){
+    Hashmap *pMap = (Hashmap*)hMap;
+    if(capacity < pMap->capacity)
+        return NULL;
+    HASHMAP hNew = hashmap_init_set_cap(pMap->key_funcs, pMap->val_funcs, capacity);
+    if(hNew == NULL)
+        return NULL;
+    int i, j;
+    for(i = 0; i < pMap->capacity; i++){
+        if(pMap->buckets[i] != NULL){
+            for(j = 0; j < pMap->buckets[i]->size; j++){
+                if(!hashmap_put(hNew, pMap->buckets[i]->keys[j], pMap->buckets[i]->values[j])){
+                    hashmap_destroy(&hNew);
+                    return NULL;
+                }
+            }
+        }
+    }
+    return hNew;
 }
 
 void hashmap_destroy(HASHMAP* phMap){
