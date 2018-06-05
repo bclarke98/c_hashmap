@@ -165,6 +165,41 @@ ITEM hashmap_get(HASHMAP hMap, ITEM key){
     return NULL;
 }
 
+Status hashmap_remove(HASHMAP hMap, ITEM key){
+    Hashmap *pMap = (Hashmap*)hMap;
+    int index = func_hash(pMap->key_funcs, key, pMap->capacity);
+    if(index < 0 || index >= pMap->capacity || pMap->buckets[index] == NULL)
+        return FAILURE;
+    Bucket *pBucket = pMap->buckets[index];
+    int i;
+    for(i = 0; i < pBucket->size; i++){
+        if(func_compare(pMap->key_funcs, key, pBucket->keys[i]) == 0){
+            pBucket->size--;
+            func_destroy(pBucket->key_funcs, &pBucket->keys[i]);
+            func_destroy(pBucket->val_funcs, &pBucket->values[i]);
+            break;
+        }
+    }
+    return NULL;
+}
+
+ITEM hashmap_pop(HASHMAP hMap, ITEM key){
+    Hashmap *pMap = (Hashmap*)hMap;
+    int index = func_hash(pMap->key_funcs, key, pMap->capacity);
+    if(index < 0 || index >= pMap->capacity || pMap->buckets[index] == NULL)
+        return FAILURE;
+    Bucket *pBucket = pMap->buckets[index];
+    int i;
+    for(i = 0; i < pBucket->size; i++){
+        if(func_compare(pMap->key_funcs, key, pBucket->keys[i]) == 0){
+            pBucket->size--;
+            func_destroy(pBucket->key_funcs, &pBucket->keys[i]);
+            return pBucket->values[i];
+        }
+    }
+    return NULL;
+}
+
 HASHMAP hashmap_deep_copy(HASHMAP hMap, int capacity){
     Hashmap *pMap = (Hashmap*)hMap;
     if(capacity < pMap->capacity)
